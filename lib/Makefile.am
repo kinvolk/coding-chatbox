@@ -3,7 +3,7 @@ chatbox_private_sources = \
 	chatbox-utils.c \
 	chatbox-utils.h \
 	chatbox-launch.c \
-	chatobox-utils.h \
+	chatbox-launch.h \
 	$(NULL)
 
 pkglib_LTLIBRARIES = libcoding_chatbox_private-1.0.la
