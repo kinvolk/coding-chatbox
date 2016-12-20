@@ -28,11 +28,12 @@ const ChatboxMessageView = new Lang.Interface({
     copyToClipboard: function() {
     },
 
-    launchApp: function(){
-    },
     supportsCopyPaste: function() {
         return false;
     }
+    
+    launchApp: function(){
+    },
 });
 
 const TextChatboxMessageView = new Lang.Class({
@@ -178,10 +179,11 @@ const AttachmentChatboxMessageView = new Lang.Class({
         ChatboxPrivate.utils_copy_file_to_clipboard(this, this.state.path);
     },
 
-    launchApp: function() {
-        ChatboxPrivate.utils_launch_application(this);
-    },
     supportsCopyPaste: function() {
         return true;
     }
+    
+    launchApp: function() {
+        ChatboxPrivate.utils_launch_application(this);
+    },
 });
