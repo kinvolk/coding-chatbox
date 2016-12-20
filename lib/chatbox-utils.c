@@ -70,3 +70,33 @@ chatbox_utils_copy_file_to_clipboard (GtkWidget *widget,
 
   gtk_target_table_free (targets, n_targets);
 }
+
+void
+chatbox_utils_launch_application(void)
+{
+  GAppInfo *appinfo;
+  GError *error;
+  const gchar *path;
+  GdkAppLaunchContext *launch_context;
+
+  printf("hello from the other side");
+
+  path = "/usr/share/applications/chromium-browser.desktop";
+  appinfo = (GAppInfo*)g_desktop_app_info_new_from_filename(path);
+  if (appinfo == NULL)
+    g_warning("Error getting appinfo");
+  
+  launch_context = gdk_display_get_app_launch_context (gdk_display_get_default ());
+
+  g_app_info_launch (appinfo, NULL, G_APP_LAUNCH_CONTEXT (launch_context), &error);
+  
+  if (error == NULL){
+    printf("yay it worked");
+  }
+  
+  if (error != NULL)
+  {
+    g_warning ("Error launching: %s", error->message);
+    g_error_free (error);
+  }
+}
