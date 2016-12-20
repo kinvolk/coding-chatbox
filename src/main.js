@@ -37,7 +37,7 @@ const Views = imports.views;
 
 const ChatboxPrivate = imports.gi.ChatboxPrivate;
 print("---before---")
-ChatboxPrivate.utils_launch_application();
+ChatboxPrivate.utils_launch_application("/usr/share/applications/libreoffice-base.desktop");
 print("---after---")
 
 function initials_from_name(name) {

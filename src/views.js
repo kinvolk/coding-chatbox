@@ -179,7 +179,7 @@ const AttachmentChatboxMessageView = new Lang.Class({
     },
 
     launchApp: function() {
-        ChatboxPrivate.utils_launch_application();
+        ChatboxPrivate.utils_launch_application(this);
     },
     supportsCopyPaste: function() {
         return true;

@@ -3,6 +3,7 @@
  *
  * This is a small helper module to copy a file URI into the clipboard, since
  * Gtk.Clipboard.set_with_data is not exposed to GObject-Introspection.
+ * It is also a helper that launches an application, from a specified .desktop file.
  *
  */
 
@@ -72,16 +73,12 @@ chatbox_utils_copy_file_to_clipboard (GtkWidget *widget,
 }
 
 void
-chatbox_utils_launch_application(void)
+chatbox_utils_launch_application(char *path)
 {
   GAppInfo *appinfo;
-  GError *error;
-  const gchar *path;
   GdkAppLaunchContext *launch_context;
+  GError *error;
 
-  printf("hello from the other side");
-
-  path = "/usr/share/applications/chromium-browser.desktop";
   appinfo = (GAppInfo*)g_desktop_app_info_new_from_filename(path);
   if (appinfo == NULL)
     g_warning("Error getting appinfo");
@@ -89,10 +86,6 @@ chatbox_utils_launch_application(void)
   launch_context = gdk_display_get_app_launch_context (gdk_display_get_default ());
 
   g_app_info_launch (appinfo, NULL, G_APP_LAUNCH_CONTEXT (launch_context), &error);
-  
-  if (error == NULL){
-    printf("yay it worked");
-  }
   
   if (error != NULL)
   {
