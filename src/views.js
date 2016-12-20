@@ -28,6 +28,8 @@ const ChatboxMessageView = new Lang.Interface({
     copyToClipboard: function() {
     },
 
+    launchApp: function(){
+    },
     supportsCopyPaste: function() {
         return false;
     }
@@ -176,6 +178,9 @@ const AttachmentChatboxMessageView = new Lang.Class({
         ChatboxPrivate.utils_copy_file_to_clipboard(this, this.state.path);
     },
 
+    launchApp: function() {
+        ChatboxPrivate.utils_launch_application();
+    },
     supportsCopyPaste: function() {
         return true;
     }

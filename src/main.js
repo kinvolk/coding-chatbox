@@ -34,6 +34,12 @@ const Service = imports.service;
 const State = imports.state;
 const Views = imports.views;
 
+
+const ChatboxPrivate = imports.gi.ChatboxPrivate;
+print("---before---")
+ChatboxPrivate.utils_launch_application();
+print("---after---")
+
 function initials_from_name(name) {
     return String(name.split().map(function(word) {
         return word[0];
