@@ -30,6 +30,10 @@ const Service = imports.service;
 const State = imports.state;
 const Views = imports.views;
 
+const MyLog = imports.mylog;
+
+MyLog.file('cc.log');
+
 const CHAT_WITH_ACTION = 'chat-with';
 
 const CLOCK_SCHEMA = 'org.gnome.desktop.interface';
@@ -407,6 +411,9 @@ const CodingChatboxMainWindow = new Lang.Class({
     },
 
     _markActorAsRead: function(actor) {
+        MyLog.start('marking messages as read');
+        MyLog.more('actor: ' + actor);
+        MyLog.more('notification id: ' + notificationId(actor));
         // Assuming here that this will always succeed, because it is part
         // of the chatbox' invariant that an entry in the list box always has
         // a page on the GtkStack and vice versa.
@@ -421,9 +428,11 @@ const CodingChatboxMainWindow = new Lang.Class({
         row.highlight = false;
         this._state.markAllMessagesByActorAsRead(actor);
         this.application.withdraw_notification(notificationId(actor));
+        MyLog.done();
     },
 
     _markVisibleActorAsRead: function() {
+        MyLog.start('marking visible actor as read');
         // Sets all the messages on the visible actor as read, by calling
         // focused() on the last view, removing any highlights and withdrawing
         // any notifications.
@@ -433,6 +442,7 @@ const CodingChatboxMainWindow = new Lang.Class({
         // 'selected' by the user
         let selectedActor = this.chatbox_stack.get_visible_child_name();
         this._markActorAsRead(selectedActor);
+        MyLog.done();
     },
 
     _actorIsVisible: function(name) {
@@ -685,6 +695,7 @@ const CodingChatboxMainWindow = new Lang.Class({
     },
 
     clearConversations: function() {
+        MyLog.start('clearing conversations');
         this._state.clearConversations();
         this.chatbox_stack.get_children().forEach(function(child) {
             child.destroy();
@@ -693,6 +704,7 @@ const CodingChatboxMainWindow = new Lang.Class({
             this._contentsForActor(actor.name);
             this._markActorAsRead(actor.name);
         }));
+        MyLog.done();
     },
 
     chatMessage: function(actor, message, location, timestamp, style, sentBy, pendingTime) {
@@ -800,10 +812,13 @@ const CodingChatboxApplication = new Lang.Class({
             parameter_type: new GLib.VariantType('s')
         });
         chatWithAction.connect('activate', Lang.bind(this, function(action, parameter) {
+            MyLog.start('chat with action is activated');
             this.activate();
 
             let actor = parameter.unpack();
+            MyLog.more('actor: ' + actor);
             this._mainWindow.switchToChatWith(actor);
+            MyLog.done()
         }));
         this.add_action(chatWithAction);
     },
@@ -885,8 +900,10 @@ const CodingChatboxApplication = new Lang.Class({
         }));
 
         this._skeleton.connect('reset', Lang.bind(this, function() {
+            MyLog.start('resetting the chatbox');
             if (this._mainWindow)
                 this._mainWindow.clearConversations();
+            MyLog.done();
         }));
 
         return true;
@@ -901,6 +918,9 @@ const CodingChatboxApplication = new Lang.Class({
     },
 
     showNotification: function(title, body, icon, actor) {
+        MyLog.start('show notification')
+        MyLog.more('actor: ' + actor);
+        MyLog.more('notification id: ' + notificationId(actor));
         let notification = new Gio.Notification();
         notification.set_title(title);
         notification.set_body(body);
@@ -908,6 +928,7 @@ const CodingChatboxApplication = new Lang.Class({
             notification.set_icon(icon);
         notification.set_default_action_and_target('app.' + CHAT_WITH_ACTION, new GLib.Variant('s', actor));
         this.send_notification(notificationId(actor), notification);
+        MyLog.done();
     }
 });
 
